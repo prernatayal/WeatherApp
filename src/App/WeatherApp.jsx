@@ -1,11 +1,10 @@
 import React, { useState } from 'react';
 import './WeatherApp.css';
 import { useDebounceFunction } from '../CommonFunctions/Debounce';
+import { dateBuilder } from '../CommonFunctions/DateBuilder';
 
-const api = {
-    key: "d6564e0dc223bd0343a59b2c55669928",
-    base: "https://api.openweathermap.org/data/2.5/"
-}
+const apiKey = import.meta.env.VITE_WEATHER_API_KEY;
+const apiUrl = import.meta.env.VITE_WEATHER_API_URL;
 
 const WeatherApp = () => {
 
@@ -18,26 +17,11 @@ const WeatherApp = () => {
         1000
     );
 
-
-    const dateBuilder = (date) => {
-
-        let months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
-        let days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
-
-        let day = days[date.getDay()];
-        let dates = date.getDate();
-        let month = months[date.getMonth()];
-        let year = date.getFullYear();
-
-        return (`${day} ${dates} ${month} ${year}`)
-
-    }
-
     const handleSearch = (e) => {
         let value = e.target.value;
         if (value) {
             setSearchTerm(value);
-            debounce(() => fetch(`${api.base}weather?q=${value}&units=metric&APPID=${api.key}`)
+            debounce(() => fetch(`${apiUrl}weather?q=${value}&units=metric&APPID=${apiKey}`)
                 .then(res => res.json())
                 .then(result => {
                     if (result?.id) {
